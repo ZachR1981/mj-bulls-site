@@ -61,7 +61,6 @@ function populateComparisonDropdowns() {
     if (!row) return;
 
     const starters = row.starters.split("|").map(s => s.trim());
-
     playerSelect.innerHTML = "";
 
     starters.forEach(p => {
@@ -80,6 +79,27 @@ function populateComparisonDropdowns() {
 }
 
 // ===============================
+// PARSE STARTER STATS STRING
+// Format: Name:PPG|RPG|APG|FG% ; ...
+// ===============================
+function parseStarterStats(starterStatsRaw) {
+  const map = {};
+  if (!starterStatsRaw || starterStatsRaw === "STARTER_STATS_TBD") return map;
+
+  const entries = starterStatsRaw.split(";").map(s => s.trim()).filter(Boolean);
+
+  entries.forEach(entry => {
+    const [namePart, statsPart] = entry.split(":");
+    if (!namePart || !statsPart) return;
+
+    const [ppg, rpg, apg, fg] = statsPart.split("|").map(s => s.trim());
+    map[namePart] = { ppg, rpg, apg, fg };
+  });
+
+  return map;
+}
+
+// ===============================
 // PLAYER COMPARISON LOGIC
 // ===============================
 function comparePlayers() {
@@ -89,11 +109,22 @@ function comparePlayers() {
   const row = seasonData.find(r => r.season === season);
   if (!row) return;
 
+  const starterStatsMap = row.starterStatsMap || {};
+  const starterStats = starterStatsMap[player];
+
+  let starterLine = `<p><strong>${player}:</strong> Starter stats not yet added.</p>`;
+
+  if (starterStats) {
+    starterLine = `
+      <p><strong>${player}:</strong> ${starterStats.ppg} PPG, ${starterStats.rpg} RPG, ${starterStats.apg} APG, FG% ${starterStats.fg}</p>
+    `;
+  }
+
   comparisonResult.innerHTML = `
     <h3>${season}</h3>
     <p><strong>Michael Jordan:</strong> ${row.ppg} PPG, ${row.rpg} RPG, ${row.apg} APG</p>
     <p><strong>Advanced:</strong> PER ${row.mj_per}, WS ${row.mj_ws}, BPM ${row.mj_bpm}</p>
-    <p><strong>${player}:</strong> Starter-level impact (teammate stats can be added later)</p>
+    ${starterLine}
     <p><strong>Team Context:</strong> Coach ${row.coach}, SRS ${row.team_srs}, OffRtg ${row.team_off_rtg}, DefRtg ${row.team_def_rtg}</p>
   `;
 }
@@ -109,25 +140,30 @@ fetch("data/mj_seasons.csv")
     rows.forEach(row => {
       if (!row.trim()) return;
 
+      const parts = row.split(",");
+      if (parts.length < 22) return;
+
       const [
         season, team, gp, mpg, ppg, rpg, apg,
         fg_pct, fg3_pct, ft_pct,
         team_record, playoff_result, starters,
         coach, team_srs, team_off_rtg, team_def_rtg,
-        mj_per, mj_ws, mj_bpm, awards
-      ] = row.split(",");
+        mj_per, mj_ws, mj_bpm, awards, starter_stats
+      ] = parts;
+
+      const starterStatsMap = parseStarterStats(starter_stats);
 
       const dataRow = {
         season, team, gp, mpg, ppg, rpg, apg,
         fg_pct, fg3_pct, ft_pct,
         team_record, playoff_result, starters,
         coach, team_srs, team_off_rtg, team_def_rtg,
-        mj_per, mj_ws, mj_bpm, awards
+        mj_per, mj_ws, mj_bpm, awards,
+        starterStatsMap
       };
 
       seasonData.push(dataRow);
 
-      // Build season card
       const card = document.createElement("div");
       card.className = "season-card";
       card.id = `season-${season}`;
@@ -172,8 +208,6 @@ fetch("data/mj_seasons.csv")
       `;
 
       seasonsDiv.appendChild(card);
-
-      // Add to timeline
       addToTimeline(season);
     });
 
