@@ -1,0 +1,16 @@
+CREATE TABLE mj_seasons (
+  season TEXT PRIMARY KEY,
+  team TEXT,
+  gp INTEGER,
+  mpg REAL,
+  ppg REAL,
+  rpg REAL,
+  apg REAL,
+  fg_pct REAL,
+  fg3_pct REAL,
+  ft_pct REAL,
+  team_record TEXT,
+  playoff_result TEXT
+);
+
+COPY mj_seasons FROM 'mj_seasons.csv' CSV HEADER;
