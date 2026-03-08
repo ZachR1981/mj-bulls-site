@@ -71,7 +71,7 @@ function compareGOAT() {
 // ===============================
 // LOAD CSV + BUILD SEASON CARDS
 // ===============================
-fetch("data/mj_seasons.csv?v=2")
+fetch("data/mj_seasons.csv?v=5")
   .then(response => response.text())
   .then(csvText => {
     const rows = csvText.split("\n").slice(1);
@@ -80,7 +80,7 @@ fetch("data/mj_seasons.csv?v=2")
       if (!row.trim()) return;
 
       const parts = row.split(",");
-      if (parts.length < 21) return; // now expecting 21 columns
+      if (parts.length < 21) return; // expecting 21 columns
 
       const [
         season, team, gp, mpg, ppg, rpg, apg,
@@ -128,24 +128,12 @@ fetch("data/mj_seasons.csv?v=2")
         <p><strong>MJ Impact:</strong> PER ${mj_per}, WS ${mj_ws}, BPM ${mj_bpm}</p>
         <p><strong>Awards:</strong> ${awards}</p>
 
-        <button class="toggle-btn" onclick="this.nextElementSibling.classList.toggle('hidden')">
-          Show Starters
-        </button>
-        <div class="hidden">
-          <p><strong>Starters:</strong> ${starters.split("|").join(", ")}</p>
-        </div>
+        <p><strong>Starters:</strong> ${starters.split("|").join(", ")}</p>
 
-        <button class="toggle-btn" onclick="this.nextElementSibling.classList.toggle('hidden')">
-          Playoff Path
-        </button>
-        <div class="hidden">
-          <p>${playoff_result}</p>
-        </div>
+        <p><strong>Playoff Path:</strong> ${playoff_result}</p>
       `;
 
       seasonsDiv.appendChild(card);
       addToTimeline(season);
     });
   });
-fetch("data/mj_seasons.csv?v=3")
-
