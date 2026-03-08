@@ -147,3 +147,5 @@ fetch("data/mj_seasons.csv?v=2")
       addToTimeline(season);
     });
   });
+fetch("data/mj_seasons.csv?v=3")
+
