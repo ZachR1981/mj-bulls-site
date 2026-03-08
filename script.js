@@ -69,26 +69,24 @@ function compareGOAT() {
 }
 
 // ===============================
-// LOAD CSV + BUILD SEASON CARDS
+// LOAD CSV USING PAPAPARSE
 // ===============================
-fetch("data/mj_seasons.csv?v=6")
+fetch("data/mj_seasons.csv?v=8")
   .then(response => response.text())
   .then(csvText => {
-    const rows = csvText.split("\n").slice(1);
+    const parsed = Papa.parse(csvText, { header: true });
+    const rows = parsed.data;
 
-    rows.forEach(row => {
-      if (!row.trim()) return;
+    rows.forEach(dataRow => {
+      if (!dataRow.season) return;
 
-      const parts = row.split(",");
-      if (parts.length < 21) return; // expecting 21 columns
-
-      const [
+      const {
         season, team, gp, mpg, ppg, rpg, apg,
         fg_pct, fg3_pct, ft_pct,
         team_record, playoff_result, starters,
         coach, team_srs, team_off_rtg, team_def_rtg,
         mj_per, mj_ws, mj_bpm, awards
-      ] = parts;
+      } = dataRow;
 
       const card = document.createElement("div");
       card.className = "season-card";
@@ -102,4 +100,40 @@ fetch("data/mj_seasons.csv?v=6")
         <p><strong>Games Played:</strong> ${gp}</p>
         <p><strong>Minutes Per Game:</strong> ${mpg}</p>
         <p><strong>Points Per Game:</strong> ${ppg}</p>
-        <p><strong>Rebounds Per Game:</strong>
+        <p><strong>Rebounds Per Game:</strong> ${rpg}</p>
+        <p><strong>Assists Per Game:</strong> ${apg}</p>
+
+        <p><strong>FG%:</strong> ${fg_pct}</p>
+        <p><strong>3PT%:</strong> ${fg3_pct}</p>
+        <p><strong>FT%:</strong> ${ft_pct}</p>
+
+        <hr>
+
+        <p><strong>Team Record:</strong> ${team_record}</p>
+        <p><strong>Playoff Result:</strong> ${playoff_result}</p>
+
+        <p><strong>Team Metrics:</strong> SRS ${team_srs}, OffRtg ${team_off_rtg}, DefRtg ${team_def_rtg}</p>
+        <p><strong>MJ Impact:</strong> PER ${mj_per}, WS ${mj_ws}, BPM ${mj_bpm}</p>
+        <p><strong>Awards:</strong> ${awards}</p>
+
+        <!-- STARTERS TOGGLE -->
+        <button class="toggle-btn" onclick="this.nextElementSibling.classList.toggle('hidden')">
+          Starters
+        </button>
+        <div class="hidden">
+          <p><strong>Starters:</strong> ${starters.split("|").join(", ")}</p>
+        </div>
+
+        <!-- PLAYOFF PATH TOGGLE -->
+        <button class="toggle-btn" onclick="this.nextElementSibling.classList.toggle('hidden')">
+          Playoff Path
+        </button>
+        <div class="hidden">
+          <p>${playoff_result}</p>
+        </div>
+      `;
+
+      seasonsDiv.appendChild(card);
+      addToTimeline(season);
+    });
+  });
