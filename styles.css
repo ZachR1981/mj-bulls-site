@@ -1,74 +1,50 @@
+/* ============================
+   COLOR VARIABLES
+============================ */
 :root {
   --bulls-red: #ce1141;
   --bulls-black: #000000;
-  --bulls-gray: #c4c4c4;
-  --bulls-cream: #f4f4f6;
+  --bulls-white: #ffffff;
+  --gray-dark: #222;
+  --gray-light: #f4f4f4;
 }
 
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: var(--bulls-cream);
-  color: #111;
-}
-
-/* Dark Mode */
+/* DARK MODE */
 body.dark {
   background: #111;
   color: #eee;
 }
 
-body.dark .season-card {
-  background: #1c1c1c;
-  color: #eee;
-  box-shadow: 0 2px 6px rgba(255,255,255,0.1);
+/* ============================
+   GENERAL LAYOUT
+============================ */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: var(--gray-light);
+  color: var(--bulls-black);
 }
 
-.dark-toggle {
-  position: fixed;
-  top: 1rem;
-  right: 1rem;
-  background: var(--bulls-red);
-  color: white;
-  border: none;
-  padding: .5rem 1rem;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  z-index: 999;
-}
-
-/* Header */
-.hero {
-  background: var(--bulls-red);
-  color: white;
+header {
   text-align: center;
-  padding: 2.5rem 1rem;
-  animation: fadeSlide 1.2s ease-out forwards;
-  opacity: 0;
-  transform: translateY(-20px);
-}
-
-@keyframes fadeSlide {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  padding: 1rem;
 }
 
 .logo-row {
   display: flex;
   justify-content: center;
-  gap: 2rem;
   margin-bottom: 1rem;
 }
 
 .logo {
-  height: 80px;
-  width: auto;
+  width: 80px;
+  height: auto;
 }
 
-/* Timeline */
+/* ============================
+   TIMELINE
+============================ */
 .timeline {
   display: flex;
   overflow-x: auto;
@@ -80,15 +56,6 @@ body.dark .season-card {
   scroll-behavior: smooth;
 }
 
-.timeline div {
-  padding: .5rem 1rem;
-  background: var(--bulls-red);
-  color: white;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
-  flex-shrink: 0;
-}
 .timeline::-webkit-scrollbar {
   height: 6px;
 }
@@ -97,52 +64,82 @@ body.dark .season-card {
   background: var(--bulls-red);
   border-radius: 3px;
 }
-/* Season Cards */
-#seasons {
-  max-width: 900px;
-  margin: 2rem auto;
+
+.timeline-item {
+  padding: .5rem 1rem;
+  background: var(--bulls-red);
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+/* ============================
+   SEASON CARDS
+============================ */
+.seasons-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
   padding: 1rem;
 }
 
 .season-card {
   background: white;
-  padding: 1.2rem;
-  border-radius: 8px;
-  margin-bottom: 1.2rem;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  padding: 1rem;
+  border-left: 6px solid var(--bulls-red);
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
 
-.season-card h2 {
-  margin: 0 0 .5rem 0;
+body.dark .season-card {
+  background: #222;
+  color: #eee;
 }
 
-.badge {
-  display: inline-block;
-  background: #111;
-  color: white;
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
-  font-size: 0.8rem;
-  margin-left: 0.5rem;
-}
-
-/* PDF Button */
-.pdf-btn {
-  display: block;
-  margin: 1rem auto;
-  padding: .7rem 1.2rem;
-  background: var(--bulls-black);
+/* ============================
+   BUTTONS
+============================ */
+.toggle-btn {
+  background: var(--bulls-red);
   color: white;
   border: none;
-  border-radius: 6px;
+  padding: .5rem 1rem;
+  border-radius: 4px;
   cursor: pointer;
+  margin-top: .5rem;
+  font-weight: bold;
 }
 
-/* Comparison Section */
+.hidden {
+  display: none;
+}
+
+/* ============================
+   PLAYER COMPARISON
+============================ */
 .compare {
-  max-width: 900px;
-  margin: 2rem auto;
   padding: 1rem;
+  margin: 2rem;
+  background: white;
+  border-left: 6px solid var(--bulls-red);
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
 
+body.dark .compare {
+  background: #222;
+  color: #eee;
+}
 
+.comparison-box {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: var(--gray-light);
+  border-radius: 4px;
+}
+
+body.dark .comparison-box {
+  background: #333;
+}
