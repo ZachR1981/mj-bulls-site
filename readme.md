@@ -27,4 +27,6 @@ All season aggregates were cross-verified using:
 
 ## 🧩 SQL Import
 
-A ready-to-use SQL file is included:
+A ready-to-use SQL file is included: data_mj_seasons.sql
+
+
