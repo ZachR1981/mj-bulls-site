@@ -1,5 +1,5 @@
 CREATE TABLE mj_seasons (
-  season TEXT PRIMARY KEY,
+  season TEXT,
   team TEXT,
   gp INTEGER,
   mpg REAL,
@@ -10,7 +10,22 @@ CREATE TABLE mj_seasons (
   fg3_pct REAL,
   ft_pct REAL,
   team_record TEXT,
-  playoff_result TEXT
+  playoff_result TEXT,
+  starters TEXT,
+  coach TEXT,
+  team_srs REAL,
+  team_off_rtg REAL,
+  team_def_rtg REAL,
+  mj_per REAL,
+  mj_ws REAL,
+  mj_bpm REAL,
+  awards TEXT
 );
 
-COPY mj_seasons FROM 'mj_seasons.csv' CSV HEADER;
+INSERT INTO mj_seasons VALUES
+('1984-85','CHI',82,38.3,28.2,6.5,5.9,0.515,0.173,0.845,'38-44','Lost First Round to Bucks 1-3','Whatley|Jordan|Woolridge|Green|Corzine','Kevin Loughery',-0.9,107.5,109.0,25.8,14.0,7.5,'ROY;All-Star;All-NBA 2nd'),
+('1985-86','CHI',18,25.1,22.7,3.6,2.9,0.457,0.167,0.840,'30-52','Lost First Round to Celtics 0-3','Macy|Jordan|Woolridge|Oakley|Oldham','Stan Albeck',-2.7,105.0,108.5,27.8,3.7,9.0,'All-Star'),
+('1986-87','CHI',82,40.0,37.1,5.2,4.6,0.482,0.182,0.857,'40-42','Lost First Round to Celtics 0-3','Paxson|Jordan|Sellers|Oakley|Corzine','Doug Collins',-0.3,109.5,109.8,29.8,14.0,11.8,'Scoring Champ;All-NBA 1st'),
+('1987-88','CHI',82,40.4,35.0,5.5,5.9,0.535,0.132,0.841,'50-32','Lost Second Round to Pistons 1-4','Vincent|Jordan|Pippen|Grant|Corzine','Doug Collins',3.7,111.0,106.5,31.7,18.3,13.0,'MVP;DPOY;Scoring Champ;All-NBA 1st'),
+('1988-89','CHI',81,40.2,32.5,8.0,8.0,0.538,0.276,0.850,'47-35','Lost Conference Finals to Pistons 2-4','Vincent/Hodges|Jordan|Pippen|Grant|Cartwright','Doug Collins',3.0,110.5,107.0,31.1,19.8,11.8,'Scoring Champ;All-NBA 1st'),
+('1989-90','CHI',82,39.0,33.6,
