@@ -89,7 +89,14 @@ body.dark .season-card {
   font-weight: bold;
   flex-shrink: 0;
 }
+.timeline::-webkit-scrollbar {
+  height: 6px;
+}
 
+.timeline::-webkit-scrollbar-thumb {
+  background: var(--bulls-red);
+  border-radius: 3px;
+}
 /* Season Cards */
 #seasons {
   max-width: 900px;
@@ -137,4 +144,5 @@ body.dark .season-card {
   margin: 2rem auto;
   padding: 1rem;
 }
+
 
