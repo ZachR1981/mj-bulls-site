@@ -129,6 +129,41 @@ body.dark .comparison-box {
   background: #333;
 }
 
+.goat-bold {
+  margin-top: 1rem;
+  font-weight: bold;
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+/* GOAT CALLOUT */
+.goat-callout {
+  background: var(--bulls-red);
+  color: var(--bulls-white);
+  padding: 2rem 1.5rem;
+  margin: 2rem 1rem;
+  border-radius: 8px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.25);
+}
+
+.goat-callout h2 {
+  margin-top: 0;
+  font-size: 1.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.goat-callout p {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin: 0.8rem 0;
+}
+
+body.dark .goat-callout {
+  background: #8b0f32;
+  color: #fff;
+}
+
 /* FOOTER */
 .site-footer {
   background: var(--bulls-black);
