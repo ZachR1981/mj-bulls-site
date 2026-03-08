@@ -17,29 +17,40 @@
     <button id="darkToggle" class="toggle-btn">Toggle Dark Mode</button>
   </header>
 
+  <!-- TIMELINE -->
   <div id="timeline" class="timeline"></div>
 
+  <!-- SEASON CARDS -->
   <div id="seasons" class="seasons-container"></div>
 
+  <!-- GOAT COMPARISON -->
   <section class="compare">
-    <h2>Player Comparison</h2>
-    <p>Select a season and a teammate to compare with Michael Jordan.</p>
+    <h2>GOAT Comparison</h2>
+    <p>Select a player to compare with Michael Jordan.</p>
 
-    <select id="seasonSelect"></select>
-    <select id="playerSelect"></select>
+    <select id="goatSelect">
+      <option value="LeBron James">LeBron James</option>
+      <option value="Kobe Bryant">Kobe Bryant</option>
+      <option value="Kareem Abdul-Jabbar">Kareem Abdul-Jabbar</option>
+      <option value="Bill Russell">Bill Russell</option>
+    </select>
 
-    <button class="toggle-btn" onclick="comparePlayers()">Compare</button>
+    <button class="toggle-btn" onclick="compareGOAT()">Compare</button>
 
-    <div id="comparisonResult" class="comparison-box"></div>
+    <div id="goatResult" class="comparison-box"></div>
   </section>
-<section class="goat-callout">
-  <h2>The GOAT Case</h2>
-  <p>Across 13 Chicago Bulls seasons, Michael Jordan delivered a level of dominance unmatched in NBA history. Six championships, six Finals MVPs, five MVPs, ten scoring titles, elite efficiency, and all-time defensive impact — all from a guard who led the league in usage and responsibility.</p>
 
-  <p>His postseason consistency, two separate three-peats, and unmatched two-way excellence form a résumé that stands alone. No player has ever combined scoring, efficiency, defense, leadership, and championship success at this level.</p>
+  <!-- GOAT CALLOUT -->
+  <section class="goat-callout">
+    <h2>The GOAT Case</h2>
+    <p>Across 13 Chicago Bulls seasons, Michael Jordan delivered a level of dominance unmatched in NBA history. Six championships, six Finals MVPs, five MVPs, ten scoring titles, elite efficiency, and all-time defensive impact — all from a guard who led the league in usage and responsibility.</p>
 
-  <p class="goat-bold">This isn’t nostalgia — it’s the numbers.</p>
-</section>
+    <p>His postseason consistency, two separate three-peats, and unmatched two-way excellence form a résumé that stands alone. No player has ever combined scoring, efficiency, defense, leadership, and championship success at this level.</p>
+
+    <p class="goat-bold">This isn’t nostalgia — it’s the numbers.</p>
+  </section>
+
+  <!-- FOOTER -->
   <footer class="site-footer">
     <div class="footer-section">
       <h3>Michael Jordan Career Totals (NBA Regular Season)</h3>
@@ -66,4 +77,3 @@
   <script src="script.js"></script>
 </body>
 </html>
-
