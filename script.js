@@ -71,7 +71,7 @@ function compareGOAT() {
 // ===============================
 // LOAD CSV USING PAPAPARSE
 // ===============================
-fetch("data/mj_seasons.csv?v=8")
+fetch("data/mj_seasons.csv?v=10")
   .then(response => response.text())
   .then(csvText => {
     const parsed = Papa.parse(csvText, { header: true });
@@ -80,60 +80,57 @@ fetch("data/mj_seasons.csv?v=8")
     rows.forEach(dataRow => {
       if (!dataRow.season) return;
 
-      const {
-        season, team, gp, mpg, ppg, rpg, apg,
-        fg_pct, fg3_pct, ft_pct,
-        team_record, playoff_result, starters,
-        coach, team_srs, team_off_rtg, team_def_rtg,
-        mj_per, mj_ws, mj_bpm, awards
-      } = dataRow;
-
       const card = document.createElement("div");
       card.className = "season-card";
-      card.id = `season-${season}`;
+      card.id = `season-${dataRow.season}`;
 
       card.innerHTML = `
-        <h2>${season}</h2>
-        <p><strong>Team:</strong> ${team}</p>
-        <p><strong>Coach:</strong> ${coach}</p>
+        <h2>${dataRow.season}</h2>
+        <p><strong>Team:</strong> ${dataRow.team}</p>
+        <p><strong>Coach:</strong> ${dataRow.coach}</p>
 
-        <p><strong>Games Played:</strong> ${gp}</p>
-        <p><strong>Minutes Per Game:</strong> ${mpg}</p>
-        <p><strong>Points Per Game:</strong> ${ppg}</p>
-        <p><strong>Rebounds Per Game:</strong> ${rpg}</p>
-        <p><strong>Assists Per Game:</strong> ${apg}</p>
+        <p><strong>Games Played:</strong> ${dataRow.gp}</p>
+        <p><strong>Minutes Per Game:</strong> ${dataRow.mpg}</p>
+        <p><strong>Points Per Game:</strong> ${dataRow.ppg}</p>
+        <p><strong>Rebounds Per Game:</strong> ${dataRow.rpg}</p>
+        <p><strong>Assists Per Game:</strong> ${dataRow.apg}</p>
 
-        <p><strong>FG%:</strong> ${fg_pct}</p>
-        <p><strong>3PT%:</strong> ${fg3_pct}</p>
-        <p><strong>FT%:</strong> ${ft_pct}</p>
+        <p><strong>FG%:</strong> ${dataRow.fg_pct}</p>
+        <p><strong>3PT%:</strong> ${dataRow.fg3_pct}</p>
+        <p><strong>FT%:</strong> ${dataRow.ft_pct}</p>
 
         <hr>
 
-        <p><strong>Team Record:</strong> ${team_record}</p>
-        <p><strong>Playoff Result:</strong> ${playoff_result}</p>
+        <p><strong>Team Record:</strong> ${dataRow.team_record}</p>
+        <p><strong>Playoff Result:</strong> ${dataRow.playoff_result}</p>
 
-        <p><strong>Team Metrics:</strong> SRS ${team_srs}, OffRtg ${team_off_rtg}, DefRtg ${team_def_rtg}</p>
-        <p><strong>MJ Impact:</strong> PER ${mj_per}, WS ${mj_ws}, BPM ${mj_bpm}</p>
-        <p><strong>Awards:</strong> ${awards}</p>
+        <p><strong>Team Metrics:</strong> SRS ${dataRow.team_srs}, OffRtg ${dataRow.team_off_rtg}, DefRtg ${dataRow.team_def_rtg}</p>
+        <p><strong>MJ Impact:</strong> PER ${dataRow.mj_per}, WS ${dataRow.mj_ws}, BPM ${dataRow.mj_bpm}</p>
+        <p><strong>Awards:</strong> ${dataRow.awards}</p>
 
         <!-- STARTERS TOGGLE -->
-        <button class="toggle-btn" onclick="this.nextElementSibling.classList.toggle('hidden')">
-          Starters
-        </button>
-        <div class="hidden">
-          <p><strong>Starters:</strong> ${starters.split("|").join(", ")}</p>
+        <button class="toggle-btn starters-btn">Starters</button>
+        <div class="toggle-content starters-content hidden">
+          <p><strong>Starters:</strong> ${dataRow.starters.split("|").join(", ")}</p>
         </div>
 
         <!-- PLAYOFF PATH TOGGLE -->
-        <button class="toggle-btn" onclick="this.nextElementSibling.classList.toggle('hidden')">
-          Playoff Path
-        </button>
-        <div class="hidden">
-          <p>${playoff_result}</p>
+        <button class="toggle-btn playoff-btn">Playoff Path</button>
+        <div class="toggle-content playoff-content hidden">
+          <p>${dataRow.playoff_result}</p>
         </div>
       `;
 
       seasonsDiv.appendChild(card);
-      addToTimeline(season);
+      addToTimeline(dataRow.season);
+    });
+
+    // ===============================
+    // ACTIVATE ALL TOGGLES
+    // ===============================
+    document.querySelectorAll(".toggle-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        btn.nextElementSibling.classList.toggle("hidden");
+      });
     });
   });
