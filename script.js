@@ -1,3 +1,5 @@
+console.log("SCRIPT LOADED");
+
 // ===============================
 // DARK MODE TOGGLE
 // ===============================
@@ -14,10 +16,16 @@ if (darkToggle) {
 const timelineDiv = document.getElementById("timeline");
 const seasonsDiv = document.getElementById("seasons");
 
+// Small helpers so NOTHING can crash
+const safe = v => (v === undefined || v === null || v === "" ? "—" : v);
+const safeSplit = v =>
+  v && typeof v === "string" ? v.split("|").map(s => s.trim()).join(", ") : "—";
+
 // ===============================
 // TIMELINE BUILDER
 // ===============================
 function addToTimeline(season) {
+  if (!timelineDiv) return;
   const div = document.createElement("div");
   div.textContent = season;
   div.className = "timeline-item";
@@ -47,12 +55,20 @@ const goatStats = {
 // GOAT COMPARISON LOGIC
 // ===============================
 function compareGOAT() {
-  const player = document.getElementById("goatSelect").value;
+  const select = document.getElementById("goatSelect");
+  const resultDiv = document.getElementById("goatResult");
+  if (!select || !resultDiv) return;
 
+  const player = select.value;
   const mj = goatStats["Michael Jordan"];
   const other = goatStats[player];
 
-  document.getElementById("goatResult").innerHTML = `
+  if (!other) {
+    resultDiv.innerHTML = "";
+    return;
+  }
+
+  resultDiv.innerHTML = `
     <h3>Michael Jordan vs ${player}</h3>
 
     <p><strong>Scoring Average:</strong> MJ ${mj.ppg} PPG — ${player} ${other.ppg} PPG</p>
@@ -67,24 +83,27 @@ function compareGOAT() {
 // ===============================
 // LOAD CSV USING PAPAPARSE
 // ===============================
-fetch("data/mj_seasons.csv?v=12")
-  .then(response => response.text())
+fetch("data/mj_seasons.csv")
+  .then(response => {
+    console.log("CSV response status:", response.status);
+    return response.text();
+  })
   .then(csvText => {
-    const parsed = Papa.parse(csvText, { header: true });
+    console.log("CSV first 200 chars:", csvText.slice(0, 200));
+    const parsed = Papa.parse(csvText, { header: true, skipEmptyLines: true });
     const rows = parsed.data;
 
     rows.forEach(row => {
       if (!row.season) return;
-
-      const safe = v => v && v !== "—" ? v : "—";
 
       const card = document.createElement("div");
       card.className = "season-card";
       card.id = `season-${row.season}`;
 
       card.innerHTML = `
-        <h2>${row.season}</h2>
+        <h2>${safe(row.season)}</h2>
         <p><strong>Team:</strong> ${safe(row.team)}</p>
+        <p><strong>Coach:</strong> ${safe(row.coach)}</p>
 
         <p><strong>Games Played:</strong> ${safe(row.gp)}</p>
         <p><strong>Minutes Per Game:</strong> ${safe(row.mpg)}</p>
@@ -99,22 +118,38 @@ fetch("data/mj_seasons.csv?v=12")
         <hr>
 
         <p><strong>Team Record:</strong> ${safe(row.team_record)}</p>
-        <p><strong>Playoff Result:</strong> ${safe(row.playoff_result)}</p>
+        <p><strong>Team Metrics:</strong> SRS ${safe(row.team_srs)}, OffRtg ${safe(row.team_off_rtg)}, DefRtg ${safe(row.team_def_rtg)}</p>
+        <p><strong>MJ Impact:</strong> PER ${safe(row.mj_per)}, WS ${safe(row.mj_ws)}, BPM ${safe(row.mj_bpm)}</p>
+        <p><strong>Awards:</strong> ${safe(row.awards)}</p>
 
-        <button class="toggle-btn">Playoff Path</button>
+        <!-- STARTERS TOGGLE -->
+        <button class="toggle-btn starters-btn">Starters</button>
+        <div class="toggle-content hidden">
+          <p><strong>Starters:</strong> ${safeSplit(row.starters)}</p>
+        </div>
+
+        <!-- PLAYOFF PATH TOGGLE -->
+        <button class="toggle-btn playoff-btn">Playoff Path</button>
         <div class="toggle-content hidden">
           <p>${safe(row.playoff_result)}</p>
         </div>
       `;
 
-      seasonsDiv.appendChild(card);
+      if (seasonsDiv) seasonsDiv.appendChild(card);
       addToTimeline(row.season);
     });
 
     // ACTIVATE TOGGLES
     document.querySelectorAll(".toggle-btn").forEach(btn => {
       btn.addEventListener("click", () => {
-        btn.nextElementSibling.classList.toggle("hidden");
+        const content = btn.nextElementSibling;
+        if (content) content.classList.toggle("hidden");
       });
     });
+
+    // Initialize GOAT comparison once everything is ready
+    compareGOAT();
+  })
+  .catch(err => {
+    console.error("Error loading or parsing CSV:", err);
   });
