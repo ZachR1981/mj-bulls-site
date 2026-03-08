@@ -1,4 +1,6 @@
-// Dark mode toggle
+// ===============================
+// DARK MODE TOGGLE
+// ===============================
 const darkToggle = document.getElementById("darkToggle");
 if (darkToggle) {
   darkToggle.addEventListener("click", () => {
@@ -6,34 +8,46 @@ if (darkToggle) {
   });
 }
 
-// Timeline + seasons container
+// ===============================
+// GLOBAL ELEMENTS
+// ===============================
 const timelineDiv = document.getElementById("timeline");
 const seasonsDiv = document.getElementById("seasons");
 
-// Comparison elements
 const seasonSelect = document.getElementById("seasonSelect");
 const playerSelect = document.getElementById("playerSelect");
 const comparisonResult = document.getElementById("comparisonResult");
 
 let seasonData = [];
 
-// Add season to timeline
+// ===============================
+// TIMELINE BUILDER
+// ===============================
 function addToTimeline(season) {
   if (!timelineDiv) return;
+
   const div = document.createElement("div");
   div.textContent = season;
+  div.className = "timeline-item";
+
   div.onclick = () => {
     const card = document.getElementById(`season-${season}`);
-    if (card) card.scrollIntoView({ behavior: "smooth" });
+    if (card) {
+      card.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   };
+
   timelineDiv.appendChild(div);
 }
 
-// Populate comparison dropdowns
+// ===============================
+// PLAYER COMPARISON DROPDOWNS
+// ===============================
 function populateComparisonDropdowns() {
   if (!seasonSelect || !playerSelect) return;
 
   seasonSelect.innerHTML = "";
+
   seasonData.forEach(row => {
     const opt = document.createElement("option");
     opt.value = row.season;
@@ -47,10 +61,11 @@ function populateComparisonDropdowns() {
     if (!row) return;
 
     const starters = row.starters.split("|").map(s => s.trim());
+
     playerSelect.innerHTML = "";
 
     starters.forEach(p => {
-      if (p !== "Jordan" && !p.includes("Jordan")) {
+      if (!p.includes("Jordan")) {
         const opt = document.createElement("option");
         opt.value = p;
         opt.textContent = p;
@@ -59,32 +74,37 @@ function populateComparisonDropdowns() {
     });
   };
 
-  // Trigger initial population
   if (seasonSelect.options.length > 0) {
     seasonSelect.dispatchEvent(new Event("change"));
   }
 }
 
-// Player comparison (MJ vs selected starter name)
+// ===============================
+// PLAYER COMPARISON LOGIC
+// ===============================
 function comparePlayers() {
   const season = seasonSelect.value;
   const player = playerSelect.value;
+
   const row = seasonData.find(r => r.season === season);
   if (!row) return;
 
   comparisonResult.innerHTML = `
     <h3>${season}</h3>
-    <p><strong>Michael Jordan:</strong> ${row.ppg} PPG, ${row.rpg} RPG, ${row.apg} APG, PER ${row.mj_per}, WS ${row.mj_ws}, BPM ${row.mj_bpm}</p>
-    <p><strong>${player}:</strong> Starter-level impact; comparison slot reserved for future teammate stats.</p>
-    <p><strong>Context:</strong> Coach ${row.coach}, team SRS ${row.team_srs}, Off Rtg ${row.team_off_rtg}, Def Rtg ${row.team_def_rtg}.</p>
+    <p><strong>Michael Jordan:</strong> ${row.ppg} PPG, ${row.rpg} RPG, ${row.apg} APG</p>
+    <p><strong>Advanced:</strong> PER ${row.mj_per}, WS ${row.mj_ws}, BPM ${row.mj_bpm}</p>
+    <p><strong>${player}:</strong> Starter-level impact (teammate stats can be added later)</p>
+    <p><strong>Team Context:</strong> Coach ${row.coach}, SRS ${row.team_srs}, OffRtg ${row.team_off_rtg}, DefRtg ${row.team_def_rtg}</p>
   `;
 }
 
-// Load MJ season data
+// ===============================
+// LOAD CSV + BUILD SEASON CARDS
+// ===============================
 fetch("data/mj_seasons.csv")
   .then(response => response.text())
   .then(csvText => {
-    const rows = csvText.split("\n").slice(1); // skip header
+    const rows = csvText.split("\n").slice(1);
 
     rows.forEach(row => {
       if (!row.trim()) return;
@@ -98,33 +118,16 @@ fetch("data/mj_seasons.csv")
       ] = row.split(",");
 
       const dataRow = {
-        season,
-        team,
-        gp,
-        mpg,
-        ppg,
-        rpg,
-        apg,
-        fg_pct,
-        fg3_pct,
-        ft_pct,
-        team_record,
-        playoff_result,
-        starters,
-        coach,
-        team_srs,
-        team_off_rtg,
-        team_def_rtg,
-        mj_per,
-        mj_ws,
-        mj_bpm,
-        awards
+        season, team, gp, mpg, ppg, rpg, apg,
+        fg_pct, fg3_pct, ft_pct,
+        team_record, playoff_result, starters,
+        coach, team_srs, team_off_rtg, team_def_rtg,
+        mj_per, mj_ws, mj_bpm, awards
       };
 
       seasonData.push(dataRow);
 
-      // Create season card
-      if (!seasonsDiv) return;
+      // Build season card
       const card = document.createElement("div");
       card.className = "season-card";
       card.id = `season-${season}`;
@@ -149,7 +152,7 @@ fetch("data/mj_seasons.csv")
         <p><strong>Team Record:</strong> ${team_record}</p>
         <p><strong>Playoff Result:</strong> ${playoff_result}</p>
 
-        <p><strong>Team Metrics:</strong> SRS ${team_srs}, Off Rtg ${team_off_rtg}, Def Rtg ${team_def_rtg}</p>
+        <p><strong>Team Metrics:</strong> SRS ${team_srs}, OffRtg ${team_off_rtg}, DefRtg ${team_def_rtg}</p>
         <p><strong>MJ Impact:</strong> PER ${mj_per}, WS ${mj_ws}, BPM ${mj_bpm}</p>
         <p><strong>Awards:</strong> ${awards}</p>
 
@@ -169,6 +172,8 @@ fetch("data/mj_seasons.csv")
       `;
 
       seasonsDiv.appendChild(card);
+
+      // Add to timeline
       addToTimeline(season);
     });
 
