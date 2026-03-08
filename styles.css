@@ -225,3 +225,15 @@ body.dark .site-footer {
 body.dark .toggle-content {
   background: #333;
 }
+
+/* FIX: Ensure toggle content displays properly inside season cards */
+.season-card .toggle-content {
+  display: block;
+  width: 100%;
+}/* FIX: Seasons container styling */
+#seasons {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1rem;
+}
