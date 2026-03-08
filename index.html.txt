@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Michael Jordan — Chicago Bulls Seasons</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<button class="dark-toggle" onclick="toggleDarkMode()">Dark Mode</button>
+
+<header class="hero">
+  <div class="logo-row">
+    <img src="https://upload.wikimedia.org/wikipedia/en/6/67/Chicago_Bulls_logo.svg" class="logo">
+    <img src="https://upload.wikimedia.org/wikipedia/en/3/35/Jumpman_logo.svg" class="logo">
+  </div>
+  <h1>Michael Jordan — Chicago Bulls Seasons (1984–1998)</h1>
+  <p>A season-by-season breakdown of MJ’s dominance, achievements, and championship legacy.</p>
+</header>
+
+<div class="timeline" id="timeline"></div>
+
+<div style="text-align:center; margin: 1rem;">
+  <select id="filter" onchange="filterSeasons()">
+    <option value="all">All Seasons</option>
+    <option value="championship">Championship Seasons</option>
+    <option value="nonchampionship">Non-Championship Seasons</option>
+  </select>
+</div>
+
+<button onclick="window.print()" class="pdf-btn">
+  Download Stats as PDF
+</button>
+
+<section id="compare" class="compare">
+  <h2>Player Comparison</h2>
+  <input id="playerName" placeholder="Enter another NBA player">
+  <button onclick="comparePlayer()">Compare</button>
+  <div id="compareResult"></div>
+</section>
+
+<main>
+  <section id="seasons"></section>
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
