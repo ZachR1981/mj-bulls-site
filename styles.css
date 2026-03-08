@@ -209,3 +209,19 @@ body.dark .goat-callout {
 body.dark .site-footer {
   background: #000;
 }
+/* TOGGLE SYSTEM — REQUIRED FOR SHOW/HIDE TO WORK */
+.hidden {
+  display: none;
+}
+
+.toggle-content {
+  margin-top: 10px;
+  padding: 10px;
+  background: rgba(0,0,0,0.05);
+  border-left: 4px solid var(--bulls-red);
+  border-radius: 4px;
+}
+
+body.dark .toggle-content {
+  background: #333;
+}
