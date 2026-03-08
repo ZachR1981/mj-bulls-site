@@ -72,10 +72,12 @@ body.dark .season-card {
 .timeline {
   display: flex;
   overflow-x: auto;
+  white-space: nowrap;
   gap: 1rem;
   padding: 1rem;
   margin: 1rem auto;
-  max-width: 900px;
+  max-width: 100%;
+  scroll-behavior: smooth;
 }
 
 .timeline div {
@@ -83,9 +85,9 @@ body.dark .season-card {
   background: var(--bulls-red);
   color: white;
   border-radius: 4px;
-  white-space: nowrap;
   cursor: pointer;
   font-weight: bold;
+  flex-shrink: 0;
 }
 
 /* Season Cards */
@@ -135,3 +137,4 @@ body.dark .season-card {
   margin: 2rem auto;
   padding: 1rem;
 }
+
