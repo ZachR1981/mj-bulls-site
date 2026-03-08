@@ -67,7 +67,7 @@ function compareGOAT() {
 // ===============================
 // LOAD CSV USING PAPAPARSE
 // ===============================
-fetch("data/mj_seasons.csv?v=11")
+fetch("data/mj_seasons.csv?v=12")
   .then(response => response.text())
   .then(csvText => {
     const parsed = Papa.parse(csvText, { header: true });
@@ -76,8 +76,7 @@ fetch("data/mj_seasons.csv?v=11")
     rows.forEach(row => {
       if (!row.season) return;
 
-      // SAFETY: Prevent undefined fields from breaking the page
-      const safe = field => field ? field : "—";
+      const safe = v => v && v !== "—" ? v : "—";
 
       const card = document.createElement("div");
       card.className = "season-card";
@@ -86,7 +85,6 @@ fetch("data/mj_seasons.csv?v=11")
       card.innerHTML = `
         <h2>${row.season}</h2>
         <p><strong>Team:</strong> ${safe(row.team)}</p>
-        <p><strong>Coach:</strong> ${safe(row.coach)}</p>
 
         <p><strong>Games Played:</strong> ${safe(row.gp)}</p>
         <p><strong>Minutes Per Game:</strong> ${safe(row.mpg)}</p>
@@ -102,15 +100,6 @@ fetch("data/mj_seasons.csv?v=11")
 
         <p><strong>Team Record:</strong> ${safe(row.team_record)}</p>
         <p><strong>Playoff Result:</strong> ${safe(row.playoff_result)}</p>
-
-        <p><strong>Team Metrics:</strong> SRS ${safe(row.team_srs)}, OffRtg ${safe(row.team_off_rtg)}, DefRtg ${safe(row.team_def_rtg)}</p>
-        <p><strong>MJ Impact:</strong> PER ${safe(row.mj_per)}, WS ${safe(row.mj_ws)}, BPM ${safe(row.mj_bpm)}</p>
-        <p><strong>Awards:</strong> ${safe(row.awards)}</p>
-
-        <button class="toggle-btn">Starters</button>
-        <div class="toggle-content hidden">
-          <p>${safe(row.starters).split("|").join(", ")}</p>
-        </div>
 
         <button class="toggle-btn">Playoff Path</button>
         <div class="toggle-content hidden">
