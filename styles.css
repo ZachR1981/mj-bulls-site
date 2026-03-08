@@ -6,6 +6,34 @@
   --gray-light: #f4f4f4;
 }
 
+/* GLOBAL FONT */
+.bulls-font {
+  font-family: 'Jersey M54', sans-serif;
+  letter-spacing: 1px;
+}
+
+/* OUTLINE EFFECT FOR MAIN TITLE */
+.bulls-outline {
+  font-family: 'Jersey M54', sans-serif;
+  letter-spacing: 2px;
+  text-shadow:
+    -3px -3px 0 #000,
+     3px -3px 0 #000,
+    -3px  3px 0 #000,
+     3px  3px 0 #000;
+  color: var(--bulls-red);
+}
+
+body.dark .bulls-outline {
+  text-shadow:
+    -3px -3px 0 #fff,
+     3px -3px 0 #fff,
+    -3px  3px 0 #fff,
+     3px  3px 0 #fff;
+  color: var(--bulls-red);
+}
+
+/* DARK MODE */
 body.dark {
   background: #111;
   color: #eee;
@@ -47,15 +75,6 @@ header {
   scroll-behavior: smooth;
 }
 
-.timeline::-webkit-scrollbar {
-  height: 6px;
-}
-
-.timeline::-webkit-scrollbar-thumb {
-  background: var(--bulls-red);
-  border-radius: 3px;
-}
-
 .timeline-item {
   padding: .5rem 1rem;
   background: var(--bulls-red);
@@ -64,6 +83,8 @@ header {
   cursor: pointer;
   font-weight: bold;
   flex-shrink: 0;
+  font-family: 'Jersey M54', sans-serif;
+  letter-spacing: 1px;
 }
 
 /* SEASON CARDS */
@@ -97,10 +118,6 @@ body.dark .season-card {
   cursor: pointer;
   margin-top: .5rem;
   font-weight: bold;
-}
-
-.hidden {
-  display: none;
 }
 
 /* COMPARISON MODULE */
@@ -151,6 +168,7 @@ body.dark .comparison-box {
   font-size: 1.8rem;
   text-transform: uppercase;
   letter-spacing: 1px;
+  font-family: 'Jersey M54', sans-serif;
 }
 
 .goat-callout p {
@@ -176,6 +194,7 @@ body.dark .goat-callout {
 
 .footer-section h3 {
   margin: 0 0 .5rem 0;
+  font-family: 'Jersey M54', sans-serif;
 }
 
 .footer-section p {
