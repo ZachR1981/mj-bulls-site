@@ -14,14 +14,10 @@ if (darkToggle) {
 const timelineDiv = document.getElementById("timeline");
 const seasonsDiv = document.getElementById("seasons");
 
-let seasonData = [];
-
 // ===============================
 // TIMELINE BUILDER
 // ===============================
 function addToTimeline(season) {
-  if (!timelineDiv) return;
-
   const div = document.createElement("div");
   div.textContent = season;
   div.className = "timeline-item";
@@ -71,63 +67,62 @@ function compareGOAT() {
 // ===============================
 // LOAD CSV USING PAPAPARSE
 // ===============================
-fetch("data/mj_seasons.csv?v=10")
+fetch("data/mj_seasons.csv?v=11")
   .then(response => response.text())
   .then(csvText => {
     const parsed = Papa.parse(csvText, { header: true });
     const rows = parsed.data;
 
-    rows.forEach(dataRow => {
-      if (!dataRow.season) return;
+    rows.forEach(row => {
+      if (!row.season) return;
+
+      // SAFETY: Prevent undefined fields from breaking the page
+      const safe = field => field ? field : "—";
 
       const card = document.createElement("div");
       card.className = "season-card";
-      card.id = `season-${dataRow.season}`;
+      card.id = `season-${row.season}`;
 
       card.innerHTML = `
-        <h2>${dataRow.season}</h2>
-        <p><strong>Team:</strong> ${dataRow.team}</p>
-        <p><strong>Coach:</strong> ${dataRow.coach}</p>
+        <h2>${row.season}</h2>
+        <p><strong>Team:</strong> ${safe(row.team)}</p>
+        <p><strong>Coach:</strong> ${safe(row.coach)}</p>
 
-        <p><strong>Games Played:</strong> ${dataRow.gp}</p>
-        <p><strong>Minutes Per Game:</strong> ${dataRow.mpg}</p>
-        <p><strong>Points Per Game:</strong> ${dataRow.ppg}</p>
-        <p><strong>Rebounds Per Game:</strong> ${dataRow.rpg}</p>
-        <p><strong>Assists Per Game:</strong> ${dataRow.apg}</p>
+        <p><strong>Games Played:</strong> ${safe(row.gp)}</p>
+        <p><strong>Minutes Per Game:</strong> ${safe(row.mpg)}</p>
+        <p><strong>Points Per Game:</strong> ${safe(row.ppg)}</p>
+        <p><strong>Rebounds Per Game:</strong> ${safe(row.rpg)}</p>
+        <p><strong>Assists Per Game:</strong> ${safe(row.apg)}</p>
 
-        <p><strong>FG%:</strong> ${dataRow.fg_pct}</p>
-        <p><strong>3PT%:</strong> ${dataRow.fg3_pct}</p>
-        <p><strong>FT%:</strong> ${dataRow.ft_pct}</p>
+        <p><strong>FG%:</strong> ${safe(row.fg_pct)}</p>
+        <p><strong>3PT%:</strong> ${safe(row.fg3_pct)}</p>
+        <p><strong>FT%:</strong> ${safe(row.ft_pct)}</p>
 
         <hr>
 
-        <p><strong>Team Record:</strong> ${dataRow.team_record}</p>
-        <p><strong>Playoff Result:</strong> ${dataRow.playoff_result}</p>
+        <p><strong>Team Record:</strong> ${safe(row.team_record)}</p>
+        <p><strong>Playoff Result:</strong> ${safe(row.playoff_result)}</p>
 
-        <p><strong>Team Metrics:</strong> SRS ${dataRow.team_srs}, OffRtg ${dataRow.team_off_rtg}, DefRtg ${dataRow.team_def_rtg}</p>
-        <p><strong>MJ Impact:</strong> PER ${dataRow.mj_per}, WS ${dataRow.mj_ws}, BPM ${dataRow.mj_bpm}</p>
-        <p><strong>Awards:</strong> ${dataRow.awards}</p>
+        <p><strong>Team Metrics:</strong> SRS ${safe(row.team_srs)}, OffRtg ${safe(row.team_off_rtg)}, DefRtg ${safe(row.team_def_rtg)}</p>
+        <p><strong>MJ Impact:</strong> PER ${safe(row.mj_per)}, WS ${safe(row.mj_ws)}, BPM ${safe(row.mj_bpm)}</p>
+        <p><strong>Awards:</strong> ${safe(row.awards)}</p>
 
-        <!-- STARTERS TOGGLE -->
-        <button class="toggle-btn starters-btn">Starters</button>
-        <div class="toggle-content starters-content hidden">
-          <p><strong>Starters:</strong> ${dataRow.starters.split("|").join(", ")}</p>
+        <button class="toggle-btn">Starters</button>
+        <div class="toggle-content hidden">
+          <p>${safe(row.starters).split("|").join(", ")}</p>
         </div>
 
-        <!-- PLAYOFF PATH TOGGLE -->
-        <button class="toggle-btn playoff-btn">Playoff Path</button>
-        <div class="toggle-content playoff-content hidden">
-          <p>${dataRow.playoff_result}</p>
+        <button class="toggle-btn">Playoff Path</button>
+        <div class="toggle-content hidden">
+          <p>${safe(row.playoff_result)}</p>
         </div>
       `;
 
       seasonsDiv.appendChild(card);
-      addToTimeline(dataRow.season);
+      addToTimeline(row.season);
     });
 
-    // ===============================
-    // ACTIVATE ALL TOGGLES
-    // ===============================
+    // ACTIVATE TOGGLES
     document.querySelectorAll(".toggle-btn").forEach(btn => {
       btn.addEventListener("click", () => {
         btn.nextElementSibling.classList.toggle("hidden");
