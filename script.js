@@ -37,26 +37,6 @@ function addToTimeline(season) {
 }
 
 // ===============================
-// PARSE STARTER STATS (PLACEHOLDER SUPPORT)
-// ===============================
-function parseStarterStats(starterStatsRaw) {
-  const map = {};
-  if (!starterStatsRaw || starterStatsRaw === "STARTER_STATS_TBD") return map;
-
-  const entries = starterStatsRaw.split(";").map(s => s.trim()).filter(Boolean);
-
-  entries.forEach(entry => {
-    const [namePart, statsPart] = entry.split(":");
-    if (!namePart || !statsPart) return;
-
-    const [ppg, rpg, apg, fg] = statsPart.split("|").map(s => s.trim());
-    map[namePart] = { ppg, rpg, apg, fg };
-  });
-
-  return map;
-}
-
-// ===============================
 // GOAT COMPARISON DATA
 // ===============================
 const goatStats = {
@@ -91,7 +71,7 @@ function compareGOAT() {
 // ===============================
 // LOAD CSV + BUILD SEASON CARDS
 // ===============================
-fetch("data/mj_seasons.csv")
+fetch("data/mj_seasons.csv?v=2")
   .then(response => response.text())
   .then(csvText => {
     const rows = csvText.split("\n").slice(1);
@@ -100,25 +80,22 @@ fetch("data/mj_seasons.csv")
       if (!row.trim()) return;
 
       const parts = row.split(",");
-      if (parts.length < 22) return;
+      if (parts.length < 21) return; // now expecting 21 columns
 
       const [
         season, team, gp, mpg, ppg, rpg, apg,
         fg_pct, fg3_pct, ft_pct,
         team_record, playoff_result, starters,
         coach, team_srs, team_off_rtg, team_def_rtg,
-        mj_per, mj_ws, mj_bpm, awards, starter_stats
+        mj_per, mj_ws, mj_bpm, awards
       ] = parts;
-
-      const starterStatsMap = parseStarterStats(starter_stats);
 
       const dataRow = {
         season, team, gp, mpg, ppg, rpg, apg,
         fg_pct, fg3_pct, ft_pct,
         team_record, playoff_result, starters,
         coach, team_srs, team_off_rtg, team_def_rtg,
-        mj_per, mj_ws, mj_bpm, awards,
-        starterStatsMap
+        mj_per, mj_ws, mj_bpm, awards
       };
 
       seasonData.push(dataRow);
