@@ -21,19 +21,19 @@
 <body>
 
   <header>
-    <h1 class="title">Michael Jordan – Chicago Bulls Seasons</h1>
-    <button id="darkToggle" class="dark-toggle">Dark Mode</button>
+    <h1 class="title bulls-outline">Michael Jordan – Chicago Bulls Seasons</h1>
+    <button id="darkToggle" class="toggle-btn">Dark Mode</button>
   </header>
 
   <!-- Timeline -->
   <section id="timeline" class="timeline"></section>
 
   <!-- Season Cards -->
-  <section id="seasons" class="seasons"></section>
+  <section id="seasons"></section>
 
   <!-- GOAT Comparison -->
-  <section id="goat" class="goat-section">
-    <h2>GOAT Comparison</h2>
+  <section id="goat" class="compare">
+    <h2 class="bulls-font">GOAT Comparison</h2>
 
     <select id="goatSelect" onchange="compareGOAT()">
       <option>LeBron James</option>
@@ -42,7 +42,7 @@
       <option>Bill Russell</option>
     </select>
 
-    <div id="goatResult" class="goat-result"></div>
+    <div id="goatResult" class="comparison-box"></div>
   </section>
 
 </body>
