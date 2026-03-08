@@ -14,81 +14,36 @@
   <!-- PapaParse CSV Parser -->
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
-  <!-- Your main script (must load AFTER PapaParse) -->
+  <!-- Main Script (must load AFTER PapaParse) -->
   <script src="script.js" defer></script>
 </head>
 
 <body>
 
   <header>
-    <div class="logo-row">
-      <img src="https://upload.wikimedia.org/wikipedia/en/6/67/Chicago_Bulls_logo.svg" class="logo" alt="Chicago Bulls logo">
-    </div>
-
-    <h1 class="bulls-outline">Michael Jordan – Chicago Bulls Career</h1>
-
-    <button id="darkToggle" class="toggle-btn">Toggle Dark Mode</button>
+    <h1 class="title">Michael Jordan – Chicago Bulls Seasons</h1>
+    <button id="darkToggle" class="dark-toggle">Dark Mode</button>
   </header>
 
-  <!-- TIMELINE -->
-  <div id="timeline" class="timeline"></div>
+  <!-- Timeline -->
+  <section id="timeline" class="timeline"></section>
 
-  <!-- SEASON CARDS -->
-  <div id="seasons" class="seasons-container"></div>
+  <!-- Season Cards -->
+  <section id="seasons" class="seasons"></section>
 
-  <!-- GOAT COMPARISON -->
-  <section class="compare">
-    <h2 class="bulls-font">GOAT Comparison</h2>
-    <p>Select a player to compare with Michael Jordan.</p>
+  <!-- GOAT Comparison -->
+  <section id="goat" class="goat-section">
+    <h2>GOAT Comparison</h2>
 
-    <select id="goatSelect">
-      <option value="LeBron James">LeBron James</option>
-      <option value="Kobe Bryant">Kobe Bryant</option>
-      <option value="Kareem Abdul-Jabbar">Kareem Abdul-Jabbar</option>
-      <option value="Bill Russell">Bill Russell</option>
+    <select id="goatSelect" onchange="compareGOAT()">
+      <option>LeBron James</option>
+      <option>Kobe Bryant</option>
+      <option>Kareem Abdul-Jabbar</option>
+      <option>Bill Russell</option>
     </select>
 
-    <button class="toggle-btn" onclick="compareGOAT()">Compare</button>
-
-    <div id="goatResult" class="comparison-box"></div>
+    <div id="goatResult" class="goat-result"></div>
   </section>
 
-  <!-- GOAT CALLOUT -->
-  <section class="goat-callout">
-    <h2 class="bulls-font">The GOAT Case</h2>
-    <p>Across 13 Chicago Bulls seasons, Michael Jordan delivered a level of dominance unmatched in NBA history. Six championships, six Finals MVPs, five MVPs, ten scoring titles, elite efficiency, and all-time defensive impact — all from a guard who led the league in usage and responsibility.</p>
-
-    <p>His postseason consistency, two separate three-peats, and unmatched two-way excellence form a résumé that stands alone. No player has ever combined scoring, efficiency, defense, leadership, and championship success at this level.</p>
-
-    <p class="goat-bold">This isn’t nostalgia — it’s the numbers.</p>
-  </section>
-
-  <!-- FOOTER -->
-  <footer class="site-footer">
-    <div class="footer-section">
-      <h3 class="bulls-font">Michael Jordan Career Totals (NBA Regular Season)</h3>
-      <p><strong>Points:</strong> 32,292</p>
-      <p><strong>Rebounds:</strong> 6,672</p>
-      <p><strong>Assists:</strong> 5,633</p>
-      <p><strong>Steals:</strong> 2,514</p>
-      <p><strong>Blocks:</strong> 893</p>
-      <p><strong>FG%:</strong> 49.7% &nbsp; <strong>3PT%:</strong> 32.7% &nbsp; <strong>FT%:</strong> 83.5%</p>
-    </div>
-
-    <div class="footer-section">
-      <h3 class="bulls-font">Career Awards</h3>
-      <p>6× NBA Champion, 6× Finals MVP, 5× MVP, 14× All-Star, 11× All-NBA, 9× All-Defensive, 10× Scoring Champion, DPOY, ROY.</p>
-    </div>
-
-    <div class="footer-section">
-      <h3 class="bulls-font">Hall of Fame</h3>
-      <p>Inducted into the Naismith Memorial Basketball Hall of Fame: <strong>2009</strong></p>
-      <p class="disclaimer">This site is not affiliated with or endorsed by the Chicago Bulls or the NBA. All trademarks are property of their respective owners.</p>
-    </div>
-  </footer>
-
-  <script src="script.js"></script>
 </body>
 </html>
-
-
