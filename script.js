@@ -14,10 +14,6 @@ if (darkToggle) {
 const timelineDiv = document.getElementById("timeline");
 const seasonsDiv = document.getElementById("seasons");
 
-const seasonSelect = document.getElementById("seasonSelect");
-const playerSelect = document.getElementById("playerSelect");
-const comparisonResult = document.getElementById("comparisonResult");
-
 let seasonData = [];
 
 // ===============================
@@ -41,46 +37,7 @@ function addToTimeline(season) {
 }
 
 // ===============================
-// PLAYER COMPARISON DROPDOWNS
-// ===============================
-function populateComparisonDropdowns() {
-  if (!seasonSelect || !playerSelect) return;
-
-  seasonSelect.innerHTML = "";
-
-  seasonData.forEach(row => {
-    const opt = document.createElement("option");
-    opt.value = row.season;
-    opt.textContent = row.season;
-    seasonSelect.appendChild(opt);
-  });
-
-  seasonSelect.onchange = () => {
-    const season = seasonSelect.value;
-    const row = seasonData.find(r => r.season === season);
-    if (!row) return;
-
-    const starters = row.starters.split("|").map(s => s.trim());
-    playerSelect.innerHTML = "";
-
-    starters.forEach(p => {
-      if (!p.includes("Jordan")) {
-        const opt = document.createElement("option");
-        opt.value = p;
-        opt.textContent = p;
-        playerSelect.appendChild(opt);
-      }
-    });
-  };
-
-  if (seasonSelect.options.length > 0) {
-    seasonSelect.dispatchEvent(new Event("change"));
-  }
-}
-
-// ===============================
-// PARSE STARTER STATS STRING
-// Format: Name:PPG|RPG|APG|FG% ; ...
+// PARSE STARTER STATS (PLACEHOLDER SUPPORT)
 // ===============================
 function parseStarterStats(starterStatsRaw) {
   const map = {};
@@ -100,32 +57,34 @@ function parseStarterStats(starterStatsRaw) {
 }
 
 // ===============================
-// PLAYER COMPARISON LOGIC
+// GOAT COMPARISON DATA
 // ===============================
-function comparePlayers() {
-  const season = seasonSelect.value;
-  const player = playerSelect.value;
+const goatStats = {
+  "Michael Jordan": { ppg: 30.1, rings: 6, mvps: 5, dpoy: 1 },
+  "LeBron James": { ppg: 27.1, rings: 4, mvps: 4, dpoy: 0 },
+  "Kobe Bryant": { ppg: 25.0, rings: 5, mvps: 1, dpoy: 0 },
+  "Kareem Abdul-Jabbar": { ppg: 24.6, rings: 6, mvps: 6, dpoy: 0 },
+  "Bill Russell": { ppg: 15.1, rings: 11, mvps: 5, dpoy: 0 }
+};
 
-  const row = seasonData.find(r => r.season === season);
-  if (!row) return;
+// ===============================
+// GOAT COMPARISON LOGIC
+// ===============================
+function compareGOAT() {
+  const player = document.getElementById("goatSelect").value;
 
-  const starterStatsMap = row.starterStatsMap || {};
-  const starterStats = starterStatsMap[player];
+  const mj = goatStats["Michael Jordan"];
+  const other = goatStats[player];
 
-  let starterLine = `<p><strong>${player}:</strong> Starter stats not yet added.</p>`;
+  document.getElementById("goatResult").innerHTML = `
+    <h3>Michael Jordan vs ${player}</h3>
 
-  if (starterStats) {
-    starterLine = `
-      <p><strong>${player}:</strong> ${starterStats.ppg} PPG, ${starterStats.rpg} RPG, ${starterStats.apg} APG, FG% ${starterStats.fg}</p>
-    `;
-  }
+    <p><strong>Scoring Average:</strong> MJ ${mj.ppg} PPG — ${player} ${other.ppg} PPG</p>
+    <p><strong>Championships:</strong> MJ ${mj.rings} — ${player} ${other.rings}</p>
+    <p><strong>MVP Awards:</strong> MJ ${mj.mvps} — ${player} ${other.mvps}</p>
+    <p><strong>Defensive Player of the Year:</strong> MJ ${mj.dpoy} — ${player} ${other.dpoy}</p>
 
-  comparisonResult.innerHTML = `
-    <h3>${season}</h3>
-    <p><strong>Michael Jordan:</strong> ${row.ppg} PPG, ${row.rpg} RPG, ${row.apg} APG</p>
-    <p><strong>Advanced:</strong> PER ${row.mj_per}, WS ${row.mj_ws}, BPM ${row.mj_bpm}</p>
-    ${starterLine}
-    <p><strong>Team Context:</strong> Coach ${row.coach}, SRS ${row.team_srs}, OffRtg ${row.team_off_rtg}, DefRtg ${row.team_def_rtg}</p>
+    <p class="goat-bold">The numbers speak for themselves.</p>
   `;
 }
 
@@ -210,6 +169,4 @@ fetch("data/mj_seasons.csv")
       seasonsDiv.appendChild(card);
       addToTimeline(season);
     });
-
-    populateComparisonDropdowns();
   });
