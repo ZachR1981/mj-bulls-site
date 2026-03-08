@@ -52,17 +52,6 @@ header {
   padding: 1rem;
 }
 
-.logo-row {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 1rem;
-}
-
-.logo {
-  width: 80px;
-  height: auto;
-}
-
 /* TIMELINE */
 .timeline {
   display: flex;
@@ -87,14 +76,15 @@ header {
   letter-spacing: 1px;
 }
 
-/* SEASON CARDS */
-.seasons-container {
+/* SEASON CARDS CONTAINER */
+#seasons {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
   padding: 1rem;
 }
 
+/* SEASON CARD */
 .season-card {
   background: white;
   padding: 1rem;
@@ -120,7 +110,24 @@ body.dark .season-card {
   font-weight: bold;
 }
 
-/* COMPARISON MODULE */
+/* TOGGLE CONTENT */
+.hidden {
+  display: none;
+}
+
+.toggle-content {
+  margin-top: 10px;
+  padding: 10px;
+  background: rgba(0,0,0,0.05);
+  border-left: 4px solid var(--bulls-red);
+  border-radius: 4px;
+}
+
+body.dark .toggle-content {
+  background: #333;
+}
+
+/* GOAT MODULE */
 .compare {
   padding: 1rem;
   margin: 2rem;
@@ -151,89 +158,4 @@ body.dark .comparison-box {
   font-weight: bold;
   text-align: center;
   font-size: 1.2rem;
-}
-
-/* GOAT CALLOUT */
-.goat-callout {
-  background: var(--bulls-red);
-  color: var(--bulls-white);
-  padding: 2rem 1.5rem;
-  margin: 2rem 1rem;
-  border-radius: 8px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.25);
-}
-
-.goat-callout h2 {
-  margin-top: 0;
-  font-size: 1.8rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  font-family: 'Jersey M54', sans-serif;
-}
-
-.goat-callout p {
-  font-size: 1.05rem;
-  line-height: 1.6;
-  margin: 0.8rem 0;
-}
-
-body.dark .goat-callout {
-  background: #8b0f32;
-  color: #fff;
-}
-
-/* FOOTER */
-.site-footer {
-  background: var(--bulls-black);
-  color: var(--bulls-white);
-  padding: 1.5rem 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.footer-section h3 {
-  margin: 0 0 .5rem 0;
-  font-family: 'Jersey M54', sans-serif;
-}
-
-.footer-section p {
-  margin: .2rem 0;
-}
-
-.disclaimer {
-  font-size: 0.85rem;
-  opacity: 0.8;
-}
-
-body.dark .site-footer {
-  background: #000;
-}
-/* TOGGLE SYSTEM — REQUIRED FOR SHOW/HIDE TO WORK */
-.hidden {
-  display: none;
-}
-
-.toggle-content {
-  margin-top: 10px;
-  padding: 10px;
-  background: rgba(0,0,0,0.05);
-  border-left: 4px solid var(--bulls-red);
-  border-radius: 4px;
-}
-
-body.dark .toggle-content {
-  background: #333;
-}
-
-/* FIX: Ensure toggle content displays properly inside season cards */
-.season-card .toggle-content {
-  display: block;
-  width: 100%;
-}/* FIX: Seasons container styling */
-#seasons {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  padding: 1rem;
 }
