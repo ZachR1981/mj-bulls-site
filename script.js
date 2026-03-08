@@ -71,7 +71,7 @@ function compareGOAT() {
 // ===============================
 // LOAD CSV + BUILD SEASON CARDS
 // ===============================
-fetch("data/mj_seasons.csv?v=5")
+fetch("data/mj_seasons.csv?v=6")
   .then(response => response.text())
   .then(csvText => {
     const rows = csvText.split("\n").slice(1);
@@ -90,16 +90,6 @@ fetch("data/mj_seasons.csv?v=5")
         mj_per, mj_ws, mj_bpm, awards
       ] = parts;
 
-      const dataRow = {
-        season, team, gp, mpg, ppg, rpg, apg,
-        fg_pct, fg3_pct, ft_pct,
-        team_record, playoff_result, starters,
-        coach, team_srs, team_off_rtg, team_def_rtg,
-        mj_per, mj_ws, mj_bpm, awards
-      };
-
-      seasonData.push(dataRow);
-
       const card = document.createElement("div");
       card.className = "season-card";
       card.id = `season-${season}`;
@@ -112,28 +102,4 @@ fetch("data/mj_seasons.csv?v=5")
         <p><strong>Games Played:</strong> ${gp}</p>
         <p><strong>Minutes Per Game:</strong> ${mpg}</p>
         <p><strong>Points Per Game:</strong> ${ppg}</p>
-        <p><strong>Rebounds Per Game:</strong> ${rpg}</p>
-        <p><strong>Assists Per Game:</strong> ${apg}</p>
-
-        <p><strong>FG%:</strong> ${fg_pct}</p>
-        <p><strong>3PT%:</strong> ${fg3_pct}</p>
-        <p><strong>FT%:</strong> ${ft_pct}</p>
-
-        <hr>
-
-        <p><strong>Team Record:</strong> ${team_record}</p>
-        <p><strong>Playoff Result:</strong> ${playoff_result}</p>
-
-        <p><strong>Team Metrics:</strong> SRS ${team_srs}, OffRtg ${team_off_rtg}, DefRtg ${team_def_rtg}</p>
-        <p><strong>MJ Impact:</strong> PER ${mj_per}, WS ${mj_ws}, BPM ${mj_bpm}</p>
-        <p><strong>Awards:</strong> ${awards}</p>
-
-        <p><strong>Starters:</strong> ${starters.split("|").join(", ")}</p>
-
-        <p><strong>Playoff Path:</strong> ${playoff_result}</p>
-      `;
-
-      seasonsDiv.appendChild(card);
-      addToTimeline(season);
-    });
-  });
+        <p><strong>Rebounds Per Game:</strong>
