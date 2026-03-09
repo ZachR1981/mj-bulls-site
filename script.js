@@ -1,8 +1,11 @@
 console.log("SCRIPT LOADED");
 
-// ===============================
-// DARK MODE TOGGLE
-// ===============================
+// Helpers
+const safe = v => (v === undefined || v === null || v === "" ? "—" : v);
+const safeSplit = v =>
+  v && typeof v === "string" ? v.split("|").map(s => s.trim()).join(", ") : "—";
+
+// Dark Mode
 const darkToggle = document.getElementById("darkToggle");
 if (darkToggle) {
   darkToggle.addEventListener("click", () => {
@@ -10,39 +13,23 @@ if (darkToggle) {
   });
 }
 
-// ===============================
-// GLOBAL ELEMENTS
-// ===============================
+// Elements
 const timelineDiv = document.getElementById("timeline");
 const seasonsDiv = document.getElementById("seasons");
 
-// Small helpers so NOTHING can crash
-const safe = v => (v === undefined || v === null || v === "" ? "—" : v);
-const safeSplit = v =>
-  v && typeof v === "string" ? v.split("|").map(s => s.trim()).join(", ") : "—";
-
-// ===============================
-// TIMELINE BUILDER
-// ===============================
+// Timeline
 function addToTimeline(season) {
-  if (!timelineDiv) return;
   const div = document.createElement("div");
   div.textContent = season;
   div.className = "timeline-item";
-
   div.onclick = () => {
     const card = document.getElementById(`season-${season}`);
-    if (card) {
-      card.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
+    if (card) card.scrollIntoView({ behavior: "smooth", block: "start" });
   };
-
   timelineDiv.appendChild(div);
 }
 
-// ===============================
-// GOAT COMPARISON DATA
-// ===============================
+// GOAT Stats
 const goatStats = {
   "Michael Jordan": { ppg: 30.1, rings: 6, mvps: 5, dpoy: 1 },
   "LeBron James": { ppg: 27.1, rings: 4, mvps: 4, dpoy: 0 },
@@ -51,24 +38,43 @@ const goatStats = {
   "Bill Russell": { ppg: 15.1, rings: 11, mvps: 5, dpoy: 0 }
 };
 
-// ===============================
-// GOAT COMPARISON LOGIC
-// ===============================
-function compareGOAT() {
-  const select = document.getElementById("goatSelect");
-  const resultDiv = document.getElementById("goatResult");
-  if (!select || !resultDiv) return;
-
-  const player = select.value;
+// Dynamic GOAT Case
+function generateGoatCase(player) {
+  const caseDiv = document.getElementById("goatCase");
   const mj = goatStats["Michael Jordan"];
   const other = goatStats[player];
 
-  if (!other) {
-    resultDiv.innerHTML = "";
-    return;
-  }
+  const scoringEdge = mj.ppg > other.ppg ? "higher career scoring average" : "lower career scoring average";
+  const ringEdge = mj.rings > other.rings ? "more championships" : "fewer championships";
+  const mvpEdge = mj.mvps > other.mvps ? "more MVP awards" : "fewer MVP awards";
+  const dpoyEdge = mj.dpoy > other.dpoy ? "more Defensive Player of the Year awards" : "fewer Defensive Player of the Year awards";
 
-  resultDiv.innerHTML = `
+  caseDiv.innerHTML = `
+    <h2>Unbiased GOAT Case: Jordan vs ${player}</h2>
+
+    <p>Using career averages and major accolades, we can compare Michael Jordan and ${player} across the most
+    widely accepted indicators of basketball greatness: scoring production, championships, MVP awards, and defensive impact.</p>
+
+    <p>Jordan holds a <strong>${scoringEdge}</strong> (${mj.ppg} PPG vs ${other.ppg} PPG), giving him the edge in pure scoring efficiency and volume.</p>
+
+    <p>He also has <strong>${ringEdge}</strong> (${mj.rings} vs ${other.rings}), reflecting team success at the highest level.</p>
+
+    <p>In terms of individual dominance, Jordan earned <strong>${mvpEdge}</strong> (${mj.mvps} vs ${other.mvps}).</p>
+
+    <p>Defensively, Jordan has <strong>${dpoyEdge}</strong> (${mj.dpoy} vs ${other.dpoy}), including the rare achievement of winning Defensive Player of the Year as a guard.</p>
+
+    <p>These data points do not “declare” a GOAT — they simply outline the measurable differences between the two players.
+    Based on these metrics, Jordan’s résumé shows advantages in scoring, championships, MVPs, and defensive accolades.</p>
+  `;
+}
+
+// GOAT Comparison
+function compareGOAT() {
+  const player = document.getElementById("goatSelect").value;
+  const mj = goatStats["Michael Jordan"];
+  const other = goatStats[player];
+
+  document.getElementById("goatResult").innerHTML = `
     <h3>Michael Jordan vs ${player}</h3>
 
     <p><strong>Scoring Average:</strong> MJ ${mj.ppg} PPG — ${player} ${other.ppg} PPG</p>
@@ -78,22 +84,16 @@ function compareGOAT() {
 
     <p class="goat-bold">The numbers speak for themselves.</p>
   `;
+
+  generateGoatCase(player);
 }
 
-// ===============================
-// LOAD CSV USING PAPAPARSE
-// ===============================
+// Load CSV
 fetch("data/mj_seasons.csv")
-  .then(response => {
-    console.log("CSV response status:", response.status);
-    return response.text();
-  })
-  .then(csvText => {
-    console.log("CSV first 200 chars:", csvText.slice(0, 200));
-    const parsed = Papa.parse(csvText, { header: true, skipEmptyLines: true });
-    const rows = parsed.data;
-
-    rows.forEach(row => {
+  .then(r => r.text())
+  .then(csv => {
+    const parsed = Papa.parse(csv, { header: true, skipEmptyLines: true });
+    parsed.data.forEach(row => {
       if (!row.season) return;
 
       const card = document.createElement("div");
@@ -122,34 +122,26 @@ fetch("data/mj_seasons.csv")
         <p><strong>MJ Impact:</strong> PER ${safe(row.mj_per)}, WS ${safe(row.mj_ws)}, BPM ${safe(row.mj_bpm)}</p>
         <p><strong>Awards:</strong> ${safe(row.awards)}</p>
 
-        <!-- STARTERS TOGGLE -->
-        <button class="toggle-btn starters-btn">Starters</button>
+        <button class="toggle-btn">Starters</button>
         <div class="toggle-content hidden">
-          <p><strong>Starters:</strong> ${safeSplit(row.starters)}</p>
+          <p>${safeSplit(row.starters)}</p>
         </div>
 
-        <!-- PLAYOFF PATH TOGGLE -->
-        <button class="toggle-btn playoff-btn">Playoff Path</button>
+        <button class="toggle-btn">Playoff Path</button>
         <div class="toggle-content hidden">
           <p>${safe(row.playoff_result)}</p>
         </div>
       `;
 
-      if (seasonsDiv) seasonsDiv.appendChild(card);
+      seasonsDiv.appendChild(card);
       addToTimeline(row.season);
     });
 
-    // ACTIVATE TOGGLES
     document.querySelectorAll(".toggle-btn").forEach(btn => {
       btn.addEventListener("click", () => {
-        const content = btn.nextElementSibling;
-        if (content) content.classList.toggle("hidden");
+        btn.nextElementSibling.classList.toggle("hidden");
       });
     });
 
-    // Initialize GOAT comparison once everything is ready
     compareGOAT();
-  })
-  .catch(err => {
-    console.error("Error loading or parsing CSV:", err);
   });
