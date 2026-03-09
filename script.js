@@ -40,7 +40,7 @@ const goatStats = {
 
 // Dynamic GOAT Case
 function generateGoatCase(player) {
-  const caseDiv = document.getElementById("goatCase");
+  const caseDiv = document.getElementById("goatDynamic");;
   const mj = goatStats["Michael Jordan"];
   const other = goatStats[player];
 
@@ -145,3 +145,4 @@ fetch("data/mj_seasons.csv")
 
     compareGOAT();
   });
+
